@@ -33,7 +33,6 @@ class Database:
         """
         ⚠️ DANGEREUX – réservé aux scripts d’administration
         """
-        
         engine = cls._get_engine()
         SQLModel.metadata.drop_all(engine)
         SQLModel.metadata.create_all(engine)
