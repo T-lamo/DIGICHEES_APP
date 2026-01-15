@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from src.conf.db.database import Database
 from contextlib import asynccontextmanager
-
+from src.routes import router
 from src.conf.db.settings import settings
 # from src.routes.user_route import router as user_router
 # from src.routes.ticket_router import router as ticket_router    
@@ -9,6 +9,7 @@ from src.conf.db.settings import settings
 
 print(settings.DB_USER)
 print(settings.DB_PASSWORD)
+
 
 # app.include_router(user_router)
 # app.include_router(ticket_router)
@@ -27,6 +28,7 @@ async def lifespan(app: FastAPI):
     print("after yield")
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(router)
 
 
 # @app.on_event("startup")

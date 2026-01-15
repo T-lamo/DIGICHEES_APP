@@ -5,11 +5,10 @@ class Database:
     _engine = None
 
     @classmethod
-    def get_engine(cls):
+    def _get_engine(cls):
         if cls._engine is None:
-            # On utilise PyMySQL comme driver MySQL
             cls._engine = create_engine(
-                f"mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}" +
+                f"mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}"
                 f"@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}",
                 echo=True
             )
@@ -17,25 +16,24 @@ class Database:
 
     @classmethod
     def get_session(cls):
-        engine = cls.get_engine()
+        engine = cls._get_engine()
         with Session(engine) as session:
             yield session
 
     @classmethod
     def init_db(cls):
-        engine = cls.get_engine()
+       #import model import ici
+
+        engine = cls._get_engine()
         SQLModel.metadata.create_all(engine)
 
-    
     @classmethod
-    def recreate_db(cls):
+    def _recreate_db(cls):
         """
-        SUPPRIME et RECRÉE toutes les tables (DANGEREUX en production)
+        ⚠️ DANGEREUX – réservé aux scripts d’administration
         """
-        engine = cls.get_engine()
+        
 
-        # Supprimer toutes les tables
+        engine = cls._get_engine()
         SQLModel.metadata.drop_all(engine)
-
-        # Recréer toutes les tables
         SQLModel.metadata.create_all(engine)
