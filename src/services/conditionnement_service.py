@@ -1,8 +1,8 @@
 from typing import Any, Dict, List
-from fastapi import HTTPException, status
 from sqlmodel import Session
 from src.repositories.conditionnement_repository import ConditionnementRepository
 from src.models import ConditionnementRead, Conditionnement, ConditionnementBase, ConditionnementPatch
+from src.core import NotFoundException, BadRequestException
 
 
 class ConditionnementService:
@@ -37,25 +37,24 @@ class ConditionnementService:
     def get_conditionnement(self, idcondit: int) -> Conditionnement:
         obj = self.repo.get_by_id(idcondit)
         if not obj:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Conditionnement introuvable"
-            )
+            raise NotFoundException(f"Conditionnement {idcondit} introuvable")
         return obj
 
     # ------------------------
-    # CREATE (model_dump)
+    # CREATE
     # ------------------------
     def create_conditionnement(
         self, data: ConditionnementBase
     ) -> Conditionnement:
-        obj = Conditionnement(
-            **data.model_dump()
-        )
-        return self.repo.create(obj)
+        try:
+            obj = Conditionnement(**data.model_dump())
+            return self.repo.create(obj)
+        except Exception as e:
+            # Exemple : violation de contrainte unique ou autre erreur DB
+            raise BadRequestException(str(e))
 
     # ------------------------
-    # UPDATE / PATCH (model_dump)
+    # UPDATE / PATCH
     # ------------------------
     def update_conditionnement(
         self, idcondit: int, data: ConditionnementPatch
@@ -63,15 +62,20 @@ class ConditionnementService:
         obj = self.get_conditionnement(idcondit)
 
         update_data = data.model_dump(exclude_unset=True)
-
         for key, value in update_data.items():
             setattr(obj, key, value)
 
-        return self.repo.update(obj)
+        try:
+            return self.repo.update(obj)
+        except Exception as e:
+            raise BadRequestException(str(e))
 
     # ------------------------
     # DELETE
     # ------------------------
     def delete_conditionnement(self, idcondit: int) -> None:
         obj = self.get_conditionnement(idcondit)
-        self.repo.delete(obj)
+        try:
+            self.repo.delete(obj)
+        except Exception as e:
+            raise BadRequestException(str(e))

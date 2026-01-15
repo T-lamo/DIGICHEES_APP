@@ -3,6 +3,7 @@ from src.conf.db.database import Database
 from contextlib import asynccontextmanager
 from src.routes import router
 from src.conf.db.settings import settings
+from src.core import register_exception_handlers
 # from src.routes.user_route import router as user_router
 # from src.routes.ticket_router import router as ticket_router    
 # from src.routes.tag_router import router as tag_router
@@ -29,6 +30,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(router)
+register_exception_handlers(app)
+
 
 
 # @app.on_event("startup")
