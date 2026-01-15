@@ -23,6 +23,7 @@ class Database:
     @classmethod
     def init_db(cls):
        #import model import ici
+        from src.models import __all__ as models  
 
         engine = cls._get_engine()
         SQLModel.metadata.create_all(engine)
