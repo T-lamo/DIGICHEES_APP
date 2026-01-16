@@ -1,31 +1,45 @@
-from ..models import Poids
+from typing import List, Optional
+
 from sqlmodel import Session, select
+from src.models import Poids, PoidsRead
 
 class PoidsRepository:
+    def __init__(self, db: Session):
+        self.db = db
 
-    def get_all(self, db: Session):
-        return db.exec(select(Poids)).all()
+    def get_list_poids(self) -> List[PoidsRead]:
+        """Récupère la liste de tous les Poids."""
+        return self.db.query(Poids).all()
+    
 
-    def get_by_id(self, db: Session, id: int):
-        return db.get(Poids, id)
+    def get_by_id(self, idpoids: int) -> Optional[Poids]:
+        return self.db.get(Poids, idpoids)
 
-    def create(self, db: Session, poids: Poids):
-        db.add(poids)
-        db.commit()
-        db.refresh(poids)
-        return poids
+    def create(self, data: Poids) -> Poids:
+        self.db.add(data)
+        self.db.commit()
+        self.db.refresh(data)
+        return data
 
-    def patch(self, db: Session, id: int, updates: dict):
-        poids = db.get(Poids, id)
-        for key, value in updates.items():
-            setattr(poids, key, value)
-        db.add(poids)
-        db.commit()
-        db.refresh(poids)
-        return poids
+    def update(self, data: Poids) -> Poids:
+        self.db.add(data)
+        self.db.commit()
+        self.db.refresh(data)
+        return data
 
-    def delete(self, db: Session, id: int):
-        poids = db.get(Poids, id)
-        db.delete(poids)
-        db.commit()
-        return poids
+    def delete(self, data: Poids) -> None:
+        self.db.delete(data)
+        self.db.commit()
+    
+    def get_paginated(self, limit: int, offset: int) -> List[Poids]:
+        statement = (
+            select(Poids)
+            .limit(limit)
+            .offset(offset)
+        )
+        return self.db.exec(statement).all()
+
+    def count(self) -> int:
+        statement = select(Poids)
+        return len(self.db.exec(statement).all())
+      
