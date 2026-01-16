@@ -6,7 +6,7 @@ from src.conf.db.database import Database
 from src.models import Poids, PoidsBase, PoidsRead, PoidsPatch
 from src.services.poids_service import PoidsService
 
-router = APIRouter(prefix="/poidss", tags=["poidss"])
+router = APIRouter(prefix="/poids", tags=["poids"])
 
 # ---------------------------
 # Dépendance pour le service

@@ -1,5 +1,4 @@
 from typing import List, Optional
-
 from sqlmodel import Session, select
 from src.models import Poids, PoidsRead
 

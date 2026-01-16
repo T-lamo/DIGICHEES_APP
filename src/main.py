@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     print("before yield")
     Database.init_db()
     # Recréer la base de données (supprimer et recréer les tables si besoin)
-    # Database.recreate_db()
+    #Database._recreate_db()
     yield
     print("after yield")
 

@@ -3,6 +3,7 @@ from typing import List
 from datetime import date
 from decimal import Decimal
 from .conditionnement_model import ConditionnementBase
+from .poids_model import PoidsBase
 class Departement(SQLModel, table=True):
     """Table représentant les départements français."""
     
@@ -130,15 +131,11 @@ class Enseigne(SQLModel, table=True):
     ville_enseigne: str | None = Field(default=None, max_length=50, nullable=True)
     dept_enseigne: int = Field(default=0)
 
-class Poids(SQLModel, table=True):
+class Poids(PoidsBase, table=True):
     """Table représentant les poids et timbres associés aux commandes."""
-    
     __tablename__ = "t_poids"
-    
-    id: int | None = Field(default=None, primary_key=True)
-    valmin: Decimal | None = Field(default=Decimal("0"), nullable=True)
-    valtimbre: Decimal | None = Field(default=Decimal("0"), nullable=True)
-    
+    id: int | None = Field(default=None, primary_key=True) 
+       
 class Vignette(SQLModel, table=True):
     """Table représentant les vignettes (timbre) avec leurs prix pour un certain poids."""
     
