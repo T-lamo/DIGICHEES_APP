@@ -1,24 +1,24 @@
 from typing import Any, Dict, List
 from sqlmodel import Session
-from src.repositories.poids_repository import ConditionnementRepository
-from src.models import ConditionnementRead, Conditionnement, ConditionnementBase, ConditionnementPatch
+from src.repositories.poids_repository import PoidsRepository
+from src.models import PoidsRead, Poids, PoidsBase, PoidsPatch
 from src.core import NotFoundException, BadRequestException
 
 
-class ConditionnementService:
+class PoidsService:
     def __init__(self, db: Session):
-        self.repo = ConditionnementRepository(db)
+        self.repo = PoidsRepository(db)
 
     # ------------------------
     # LIST ALL
     # ------------------------
-    def list_conditionnement(self) -> List[ConditionnementRead]:
+    def list_poids(self) -> List[PoidsRead]:
         return self.repo.get_list_poids()
 
     # ------------------------
     # PAGINATION
     # ------------------------
-    def list_conditionnements(
+    def list_poidss(
         self, limit: int, offset: int
     ) -> Dict[str, Any]:
         items = self.repo.get_paginated(limit, offset)
@@ -34,20 +34,20 @@ class ConditionnementService:
     # ------------------------
     # GET BY ID
     # ------------------------
-    def get_poids(self, idcondit: int) -> Conditionnement:
-        obj = self.repo.get_by_id(idcondit)
+    def get_poids(self, idpoids: int) -> Poids:
+        obj = self.repo.get_by_id(idpoids)
         if not obj:
-            raise NotFoundException(f"Conditionnement {idcondit} introuvable")
+            raise NotFoundException(f"Poids {idpoids} introuvable")
         return obj
 
     # ------------------------
     # CREATE
     # ------------------------
-    def create_conditionnement(
-        self, data: ConditionnementBase
-    ) -> Conditionnement:
+    def create_poids(
+        self, data: PoidsBase
+    ) -> Poids:
         try:
-            obj = Conditionnement(**data.model_dump())
+            obj = Poids(**data.model_dump())
             return self.repo.create(obj)
         except Exception as e:
             # Exemple : violation de contrainte unique ou autre erreur DB
@@ -56,10 +56,10 @@ class ConditionnementService:
     # ------------------------
     # UPDATE / PATCH
     # ------------------------
-    def update_conditionnement(
-        self, idcondit: int, data: ConditionnementPatch
-    ) -> Conditionnement:
-        obj = self.get_conditionnement(idcondit)
+    def update_poids(
+        self, idpoids: int, data: PoidsPatch
+    ) -> Poids:
+        obj = self.get_poids(idpoids)
 
         update_data = data.model_dump(exclude_unset=True)
         for key, value in update_data.items():
@@ -73,8 +73,8 @@ class ConditionnementService:
     # ------------------------
     # DELETE
     # ------------------------
-    def delete_conditionnement(self, idcondit: int) -> None:
-        obj = self.get_conditionnement(idcondit)
+    def delete_poids(self, idpoids: int) -> None:
+        obj = self.get_poids(idpoids)
         try:
             self.repo.delete(obj)
         except Exception as e:
