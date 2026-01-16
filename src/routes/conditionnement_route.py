@@ -64,7 +64,7 @@ def create_conditionnement(
 
 
 # UPDATE / PATCH
-@router.put("/{idcondit}", response_model=ConditionnementRead)
+@router.patch("/{idcondit}", response_model=ConditionnementPatch)
 def update_conditionnement(
     idcondit: int,
     data: ConditionnementPatch,

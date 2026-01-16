@@ -21,12 +21,11 @@ print(settings.DB_PASSWORD)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialisation de la base de données au démarrage de l'application
-    print("before yield")
+    # Database._recreate_db()
     Database.init_db()
     # Recréer la base de données (supprimer et recréer les tables si besoin)
-    # Database.recreate_db()
     yield
-    print("after yield")
+    Database.disconnect()
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(router)
@@ -34,10 +33,7 @@ register_exception_handlers(app)
 
 
 
-# @app.on_event("startup")
-# def on_startup():
-  
-#     print("Application has started")
+
 
 
 
