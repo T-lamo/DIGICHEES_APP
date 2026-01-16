@@ -67,7 +67,7 @@ class Commande(SQLModel, table=True):
 class Conditionnement(ConditionnementBase, table=True):
     """Table représentant les conditionnements disponibles pour les objets."""
     __tablename__ = "t_conditionnement"
-    idcondit: int | None = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     objets: List["ObjetCond"] = Relationship(back_populates="condit")
 
 class Objet(SQLModel, table=True):
@@ -98,7 +98,7 @@ class ObjetCond(SQLModel, table=True):
     qteobjdeb: int = Field(default=0)
     qteobjfin: int = Field(default=0)
     codobj: int | None = Field(default=None, foreign_key="t_objet.codobj", nullable=True)
-    codcond: int | None = Field(default=None, foreign_key="t_conditionnement.idcondit", nullable=True)
+    codcond: int | None = Field(default=None, foreign_key="t_conditionnement.id", nullable=True)
     
     objets: Objet | None = Relationship(back_populates="condit")
     condit: Conditionnement | None = Relationship(back_populates="objets")
@@ -138,14 +138,11 @@ class Poids(PoidsBase, table=True):
     __tablename__ = "t_poids"
     id: int | None = Field(default=None, primary_key=True) 
        
-class Vignette(SQLModel, table=True):
+class Vignette(VignetteBase, table=True):
     """Table représentant les vignettes (timbre) avec leurs prix pour un certain poids."""
-    
     __tablename__ = "t_poidsv"
-    
     id: int | None = Field(default=None, primary_key=True)
-    valmin: Decimal | None = Field(default=Decimal("0"), nullable=True)
-    valtimbre: Decimal | None = Field(default=Decimal("0"), nullable=True)
+
 
 
 class Role(SQLModel, table=True):
