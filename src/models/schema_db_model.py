@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from typing import List
 from datetime import date
 from decimal import Decimal
+from .vignette_model import VignetteBase
 from .conditionnement_model import ConditionnementBase
 class Departement(SQLModel, table=True):
     """Table représentant les départements français."""
@@ -56,7 +57,7 @@ class Commande(SQLModel, table=True):
     timbrecde: float | None = Field(default=None, nullable=True)
     nbcolis: int = Field(default=1)
     cheqcli: float | None = Field(default=None, nullable=True)
-    idcondit: int = Field(default=0)
+    id: int = Field(default=0)
     cdeComt: str | None = Field(default=None, max_length=255, nullable=True)
     barchive: int = Field(default=0)
     bstock: int = Field(default=0)
@@ -64,7 +65,7 @@ class Commande(SQLModel, table=True):
 class Conditionnement(ConditionnementBase, table=True):
     """Table représentant les conditionnements disponibles pour les objets."""
     __tablename__ = "t_conditionnement"
-    idcondit: int | None = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     objets: List["ObjetCond"] = Relationship(back_populates="condit")
 
 class Objet(SQLModel, table=True):
@@ -95,7 +96,7 @@ class ObjetCond(SQLModel, table=True):
     qteobjdeb: int = Field(default=0)
     qteobjfin: int = Field(default=0)
     codobj: int | None = Field(default=None, foreign_key="t_objet.codobj", nullable=True)
-    codcond: int | None = Field(default=None, foreign_key="t_conditionnement.idcondit", nullable=True)
+    codcond: int | None = Field(default=None, foreign_key="t_conditionnement.id", nullable=True)
     
     objets: Objet | None = Relationship(back_populates="condit")
     condit: Conditionnement | None = Relationship(back_populates="objets")
@@ -139,15 +140,11 @@ class Poids(SQLModel, table=True):
     valmin: Decimal | None = Field(default=Decimal("0"), nullable=True)
     valtimbre: Decimal | None = Field(default=Decimal("0"), nullable=True)
     
-class Vignette(SQLModel, table=True):
+class Vignette(VignetteBase, table=True):
     """Table représentant les vignettes (timbre) avec leurs prix pour un certain poids."""
-    
     __tablename__ = "t_poidsv"
-    
     id: int | None = Field(default=None, primary_key=True)
-    valmin: Decimal | None = Field(default=Decimal("0"), nullable=True)
-    valtimbre: Decimal | None = Field(default=Decimal("0"), nullable=True)
-
+  
 
 class Role(SQLModel, table=True):
     """Table représentant les rôles dans le système."""
