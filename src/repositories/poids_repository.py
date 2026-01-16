@@ -3,14 +3,14 @@ from typing import List, Optional
 from sqlmodel import Session, select
 from src.models import Poids, PoidsRead
 
+
 class PoidsRepository:
     def __init__(self, db: Session):
         self.db = db
 
     def get_list_poids(self) -> List[PoidsRead]:
-        """Récupère la liste de tous les Poids."""
+        """Récupère la liste de toutes les poidss."""
         return self.db.query(Poids).all()
-    
 
     def get_by_id(self, idpoids: int) -> Optional[Poids]:
         return self.db.get(Poids, idpoids)
@@ -30,7 +30,7 @@ class PoidsRepository:
     def delete(self, data: Poids) -> None:
         self.db.delete(data)
         self.db.commit()
-    
+
     def get_paginated(self, limit: int, offset: int) -> List[Poids]:
         statement = (
             select(Poids)
@@ -42,4 +42,3 @@ class PoidsRepository:
     def count(self) -> int:
         statement = select(Poids)
         return len(self.db.exec(statement).all())
-      
