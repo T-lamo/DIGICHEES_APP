@@ -152,3 +152,7 @@ Projet développé avec **FastAPI**, **Docker** et **MariaDB** dans un contexte 
 ## Usefull script
  -  find . -type d -name "__pycache__" -exec rm -rf {} +
  -  find . -type f -name "*.pyc" -delete
+
+
+ ## openssl rand -hex 32
+ 
