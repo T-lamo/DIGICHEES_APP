@@ -36,3 +36,10 @@ class Database:
         engine = cls._get_engine()
         SQLModel.metadata.drop_all(engine)
         SQLModel.metadata.create_all(engine)
+
+
+    @classmethod
+    def disconnect(cls):
+        if cls._engine:
+            cls._engine.dispose()
+            cls._engine = None
