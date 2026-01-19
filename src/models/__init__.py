@@ -1,4 +1,3 @@
-from .exemple_model import Exemple, ExempleBase, ExempleRead, ExemplePatch
 from .schema_db_model import *
 from .conditionnement_model import *
 from .vignette_model import *
