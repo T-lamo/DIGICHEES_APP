@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from sqlmodel import Session, select, delete
 from src.models import Utilisateur, UtilisateurRead, RoleUtilisateur
-
+from src.models import Role
 
 class UtilisateurRepository:
     def __init__(self, db: Session):
@@ -13,7 +13,10 @@ class UtilisateurRepository:
         return self.db.query(Utilisateur).all()
 
     def get_by_id(self, idutilisateur: int) -> Optional[Utilisateur]:
-        return self.db.get(Utilisateur, idutilisateur)
+        #return self.db.get(Utilisateur, idutilisateur)
+        statement = select(Utilisateur).where(Utilisateur.code_utilisateur == idutilisateur)
+        result = self.db.exec(statement).first()
+        return result
 
     #def create(self, data: Utilisateur) -> Utilisateur:
     #    self.db.add(data)
@@ -80,4 +83,5 @@ class UtilisateurRepository:
     def count(self) -> int:
         statement = select(Utilisateur)
         return len(self.db.exec(statement).all())
+    
     
