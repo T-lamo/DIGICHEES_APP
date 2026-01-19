@@ -29,7 +29,7 @@ class UtilisateurRepository:
 
         # Ajout des liens dans t_utilisateur_role
         for r_id in roles_ids:
-            lien = RoleUtilisateur(utilisateur_id=data.code_utilisateur, role_id=r_id)
+            lien = RoleUtilisateur(utilisateur_id=data.id, role_id=r_id)
             self.db.add(lien)
         
         self.db.commit()
@@ -60,7 +60,7 @@ class UtilisateurRepository:
     #    self.db.commit()
     #"""Supprime l'utilisateur et ses liens de rôles associés"""
         # 1. On supprime d'abord tous les rôles liés à cet utilisateur
-        statement = delete(RoleUtilisateur).where(RoleUtilisateur.utilisateur_id == data.code_utilisateur)
+        statement = delete(RoleUtilisateur).where(RoleUtilisateur.utilisateur_id == data.id)
         self.db.exec(statement)
         
         # 2. Maintenant on peut supprimer l'utilisateur

@@ -8,7 +8,7 @@ from datetime import timedelta
 from src.core.auth.auth_repository import AuthRepository
 from src.core.auth.security import verify_password, get_password_hash, decode_token, create_access_token
 from src.models import Utilisateur
-from src.conf.settings import settings
+from src.settings import settings
 from src.core.exceptions import BadRequestException
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -41,7 +41,7 @@ class AuthService:
         return {"access_token": access_token, "token_type": "bearer"}
 
     # --- CURRENT USER ---
-    def get_current_user(self, token: str = Depends(oauth2_scheme)) -> Utilisateur:
+    def get_current_user(self, token: str) -> Utilisateur:
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -60,7 +60,7 @@ class AuthService:
             raise credentials_exception
         return user
 
-    def get_current_active_user(self, token: str = Depends(oauth2_scheme)) -> Utilisateur:
+    def get_current_active_user(self, token: str) -> Utilisateur:
         user = self.get_current_user(token)
         if user.disabled:
             raise HTTPException(status_code=400, detail="Inactive user")

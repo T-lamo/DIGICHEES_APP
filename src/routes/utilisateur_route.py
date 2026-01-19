@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Path, status, Query
 from sqlmodel import Session
 
 from src.conf.db.database import Database
-from src.models import Utilisateur, UtilisateurRead, UtilisateurBase, UtilisateurPatch
+from src.models import Utilisateur, UtilisateurRead, UtilisateurBase, UtilisateurPatch, UtilisateurCreate
 from src.services.utilisateur_service import UtilisateurService
 
 router = APIRouter(prefix="/utilisateurs", tags=["utilisateurs"])
@@ -53,7 +53,7 @@ def get_utilisateur(
     status_code=status.HTTP_201_CREATED
 )
 def create_utilisateur(
-    data: UtilisateurBase,
+    data: UtilisateurCreate,
     service: UtilisateurService = Depends(get_utilisateur_service)
 ):
     """
