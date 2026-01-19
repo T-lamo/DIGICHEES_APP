@@ -1,0 +1,71 @@
+from datetime import timedelta
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import Session
+from pydantic import BaseModel, constr
+
+from src.conf.db.database import Database
+from src.conf.settings import settings
+
+from src.core.auth.security import create_access_token
+from src.core.auth.auth_service import AuthService
+from src.core.auth.models import PasswordChangeRequest, Token
+
+router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+# ---------------------------
+# Dépendance pour AuthService
+# ---------------------------
+def get_auth_service(db: Session = Depends(Database.get_session)) -> AuthService:
+    return AuthService(db)
+
+
+# ---------------------------
+# LOGIN / TOKEN
+# ---------------------------
+@router.post("/token", response_model=Token)
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    auth_service: AuthService = Depends(get_auth_service)
+):
+    user = auth_service.authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    access_token = create_access_token(
+        data={"sub": user.username},
+        expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.put("/users/{utilisateur_id}/password", status_code=status.HTTP_200_OK)
+def change_password(
+    utilisateur_id: int,
+    passwords: PasswordChangeRequest,
+    service: AuthService = Depends(get_auth_service)
+):
+    service.change_password(
+        utilisateur_id,
+        current_password=passwords.current_password,
+        new_password=passwords.new_password
+    )
+    return {"message": "Mot de passe mis à jour avec succès"}
+
+# ---------------------------
+# UTILISATEUR ACTIF
+# ---------------------------
+@router.get("/users/me")
+async def read_users_me(current_user=Depends(get_auth_service().get_current_active_user)):
+    return current_user
+
+
+@router.get("/users/me/items")
+async def read_own_items(current_user=Depends(get_auth_service().get_current_active_user)):
+    return [{"item_id": "Foo", "owner": current_user.username}]
