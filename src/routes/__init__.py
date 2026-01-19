@@ -7,6 +7,7 @@ from .poids_route import router as poids_router
 from .utilisateur_route import router as utilisateur_router
 from .role_route import router as role_router
 from fastapi import APIRouter
+from src.core.auth.auth_route import router as auth_router  
 
 router = APIRouter()
 router.include_router(exemple_router)

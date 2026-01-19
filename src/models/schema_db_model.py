@@ -6,6 +6,7 @@ from .objet_model import ObjetBase
 from .vignette_model import VignetteBase
 from .conditionnement_model import ConditionnementBase
 from .poids_model import PoidsBase
+
 class Departement(SQLModel, table=True):
     """Table représentant les départements français."""
     
@@ -145,34 +146,44 @@ class Vignette(VignetteBase, table=True):
 
 
 
-class Role(SQLModel, table=True):
-    """Table représentant les rôles dans le système."""
-    
-    __tablename__ = "t_role"
-    
-    codrole: int | None = Field(default=None, primary_key=True)
-    librole: str | None = Field(default=None, max_length=25, nullable=True)
-
-class Utilisateur(SQLModel, table=True):
-    """Table représentant les utilisateurs dans le système."""
-    
-    __tablename__ = "t_utilisateur"
-    
-    code_utilisateur: int | None = Field(default=None, primary_key=True)
-    nom_utilisateur: str | None = Field(default=None, max_length=50, nullable=True)
-    prenom_utilisateur: str | None = Field(default=None, max_length=50, nullable=True)
-    username: str | None = Field(default=None, max_length=50, nullable=True)
-    couleur_fond_utilisateur: int = Field(default=0)
-    date_insc_utilisateur: date | None = Field(default=None, nullable=True)
-
 class RoleUtilisateur(SQLModel, table=True):
     """Table d'association entre les utilisateurs et leurs rôles."""
-    
     __tablename__ = "t_utilisateur_role"
-    
     id: int | None = Field(default=None, primary_key=True)
-    utilisateur_id: int | None = Field(default=None, foreign_key="t_utilisateur.code_utilisateur", nullable=True)
-    role_id: int | None = Field(default=None, foreign_key="t_role.codrole", nullable=True)
+    utilisateur_id: int | None = Field(
+        default=None,
+        foreign_key="t_utilisateur.id",
+        nullable=True
+    )
+    role_id: int | None = Field(
+        default=None,
+        foreign_key="t_role.id",
+        nullable=True
+    )
+
+
+class Role(SQLModel, table=True):
+    """Représente un rôle utilisateur dans le système."""
+    __tablename__ = "t_role"
+    id: int | None = Field(default=None, primary_key=True, alias="codrole")
+     # Relation N ↔ N vers Utilisateur
+    utilisateurs: List["Utilisateur"] = Relationship(
+        back_populates="roles",
+        link_model=RoleUtilisateur
+    )
+
+class Utilisateur(SQLModel, table=True):
+    """Représente un utilisateur de l'application."""
+    __tablename__ = "t_utilisateur"
+    id: int | None = Field(default=None, primary_key=True)
+    password: str | None = Field(default=None, max_length=255, nullable=True)
+
+    # Relation N ↔ N vers Role
+    roles: List[Role] = Relationship(
+        back_populates="utilisateurs",
+        link_model=RoleUtilisateur
+    )
+
 
 
 __all__ = [

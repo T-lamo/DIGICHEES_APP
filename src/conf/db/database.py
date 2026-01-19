@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session
-from src.conf.db.settings import settings
+from src.conf.settings import settings
 
 class Database:
     _engine = None

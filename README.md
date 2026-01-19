@@ -71,7 +71,7 @@ PORT_DB_VISUALISATION={3307}
 ### Créer l’environnement virtuel
 
 ```
-python -m venv apivenv
+python -m venv .venv
 ```
 
 ### Activer l’environnement
