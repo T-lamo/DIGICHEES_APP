@@ -1,8 +1,9 @@
 from typing import Any, Dict, List
 from sqlmodel import Session
 from src.repositories.utilisateur_repository import UtilisateurRepository
-from src.models import Utilisateur, UtilisateurBase, UtilisateurRead, UtilisateurPatch
+from src.models import Utilisateur, UtilisateurBase, UtilisateurRead, UtilisateurPatch, UtilisateurCreate
 from src.core import NotFoundException, BadRequestException
+from src.core.auth.security import get_password_hash
 
 class UtilisateurService:
     def __init__(self, db: Session):
@@ -53,13 +54,21 @@ class UtilisateurService:
     #    except Exception as e:
     #        raise BadRequestException(str(e))
     
-    def create_utilisateur(self, data: UtilisateurBase) -> Utilisateur:
+    def create_utilisateur(self, data: UtilisateurCreate) -> Utilisateur:
         try:
             #  On extrait les rôles et on exclut le champ du modèle DB
             roles_a_ajouter = data.roles_ids
-            
+
+            # On hash le mot de passe s’il existe
+            hashed_password = None
+            if data.password:
+                hashed_password = get_password_hash(data.password)
+
             # On crée l'objet Utilisateur sans le champ roles_ids
-            obj = Utilisateur(**data.model_dump(exclude={"roles_ids"}))
+            obj = Utilisateur(
+                **data.model_dump(exclude={"roles_ids", "password"}),
+                password=hashed_password
+            )
             
             # On utilise la nouvelle méthode du repo
             return self.repo.create_with_roles(obj, roles_a_ajouter)

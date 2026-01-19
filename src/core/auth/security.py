@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
-from src.conf.settings import settings
+from src.settings import settings
 
 
 password_hash = PasswordHash.recommended()

@@ -1,11 +1,11 @@
 from datetime import timedelta
+from src.core.auth.auth_dependencies import get_current_active_user
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
-from pydantic import BaseModel, constr
 
 from src.conf.db.database import Database
-from src.conf.settings import settings
+from src.settings import settings
 
 from src.core.auth.security import create_access_token
 from src.core.auth.auth_service import AuthService
@@ -45,7 +45,7 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.put("/users/{utilisateur_id}/password", status_code=status.HTTP_200_OK)
+@router.patch("/utilisateurs/{utilisateur_id}/password", status_code=status.HTTP_200_OK)
 def change_password(
     utilisateur_id: int,
     passwords: PasswordChangeRequest,
@@ -62,10 +62,6 @@ def change_password(
 # UTILISATEUR ACTIF
 # ---------------------------
 @router.get("/users/me")
-async def read_users_me(current_user=Depends(get_auth_service().get_current_active_user)):
+async def read_users_me(current_user=Depends(get_current_active_user)):
     return current_user
 
-
-@router.get("/users/me/items")
-async def read_own_items(current_user=Depends(get_auth_service().get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.username}]

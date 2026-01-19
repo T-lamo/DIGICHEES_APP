@@ -6,6 +6,7 @@ from .objet_model import ObjetBase
 from .vignette_model import VignetteBase
 from .conditionnement_model import ConditionnementBase
 from .poids_model import PoidsBase
+from .utilisateur_model import UtilisateurBase
 
 class Departement(SQLModel, table=True):
     """Table représentant les départements français."""
@@ -165,14 +166,14 @@ class RoleUtilisateur(SQLModel, table=True):
 class Role(SQLModel, table=True):
     """Représente un rôle utilisateur dans le système."""
     __tablename__ = "t_role"
-    id: int | None = Field(default=None, primary_key=True, alias="codrole")
+    id: int | None = Field(default=None, primary_key=True)
      # Relation N ↔ N vers Utilisateur
     utilisateurs: List["Utilisateur"] = Relationship(
         back_populates="roles",
         link_model=RoleUtilisateur
     )
 
-class Utilisateur(SQLModel, table=True):
+class Utilisateur(UtilisateurBase, table=True):
     """Représente un utilisateur de l'application."""
     __tablename__ = "t_utilisateur"
     id: int | None = Field(default=None, primary_key=True)
