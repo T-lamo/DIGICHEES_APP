@@ -83,3 +83,5 @@ class UtilisateurRepository:
     def count(self) -> int:
         statement = select(Utilisateur)
         return len(self.db.exec(statement).all())
+    
+    
