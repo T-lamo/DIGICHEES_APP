@@ -45,6 +45,8 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+
+
 @router.patch("/utilisateurs/{utilisateur_id}/password", status_code=status.HTTP_200_OK)
 def change_password(
     utilisateur_id: int,
