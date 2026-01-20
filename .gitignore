@@ -10,6 +10,7 @@ apivenv/
 .venv/
 env
 .env.docker
-.env.prod
-.env.dev
 /logs/
+.env.dev
+.env.prod
+.env.test
