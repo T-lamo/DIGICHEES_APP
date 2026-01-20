@@ -21,7 +21,7 @@ class ObjetPatch(ObjetBase):
 
 
 class ObjetRead(ObjetBase):
-    codobj: int
+    id: int
 
 __all__ = ["ObjetBase", "ObjetRead", "ObjetPatch"]
 

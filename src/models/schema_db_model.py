@@ -80,7 +80,7 @@ class Objet(SQLModel, table=True):
     
     __tablename__ = "t_objet"
     
-    codobj: int | None = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     libobj: str | None = Field(default=None, max_length=50, nullable=True)
     tailleobj: str | None = Field(default=None, max_length=50, nullable=True)
     puobj: Decimal = Field(default=Decimal("0.0000"), nullable=False)
@@ -102,7 +102,7 @@ class ObjetCond(SQLModel, table=True):
     idrelcond: int | None = Field(default=None, primary_key=True, index=True)
     qteobjdeb: int = Field(default=0)
     qteobjfin: int = Field(default=0)
-    codobj: int | None = Field(default=None, foreign_key="t_objet.codobj", nullable=True)
+    codobj: int | None = Field(default=None, foreign_key="t_objet.id", nullable=True)
     codcond: int | None = Field(default=None, foreign_key="t_conditionnement.id", nullable=True)
     
     objets: Objet | None = Relationship(back_populates="condit")
@@ -126,7 +126,7 @@ class DetailObjet(SQLModel, table=True):
     
     id: int | None = Field(default=None, primary_key=True)
     detail_id: int | None = Field(default=None, foreign_key="t_dtlcode.id", nullable=True)
-    objet_id: int | None = Field(default=None, foreign_key="t_objet.codobj", nullable=True)
+    objet_id: int | None = Field(default=None, foreign_key="t_objet.id", nullable=True)
 
 class Enseigne(SQLModel, table=True):
     """Table représentant les enseignes que la société travaille avec."""
