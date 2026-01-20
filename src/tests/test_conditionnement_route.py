@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+from src.models import ConditionnementBase
 
 
 def test_get_list_conditionnement(client):
@@ -38,7 +39,6 @@ def test_create_conditionnement(client):
     response = client.post("/conditionnements/", json=payload)
 
     assert response.status_code == 201
-
     data = response.json()
     assert data["libelle"] == "Montre Connectée"
     assert "id" in data
