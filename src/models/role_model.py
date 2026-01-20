@@ -5,8 +5,8 @@ from enum import Enum
 
 class RoleName(str, Enum):
     ADMIN = "Admin"
-    OPERATEUR_COLIS = "Operateur colis"
-    OPERATEUR_STOCK = "Operateur Stock"
+    OPERATEUR_COLIS = "Operateur_colis"
+    OPERATEUR_STOCK = "Operateur_stock"
 
 class RoleBase(SQLModel):
     #librole: str = Field(index=True, unique=True)
@@ -16,7 +16,7 @@ class RolePatch(RoleBase):
     librole: Optional[RoleName] = None
 
 class RoleRead(RoleBase):
-    codrole: int
+    id: int
 
 __all__ = ["RoleBase", "RoleRead", "RolePatch", "RoleName"]
 

@@ -14,13 +14,17 @@ class RoleRepository:
 
     def get_by_id(self, idrole: int) -> Optional[Role]:
         #return self.db.get(Role, idrole)
-        statement = select(Role).where(Role.codrole == idrole)
+        statement = select(Role).where(Role.id == idrole)
         role = self.db.exec(statement).first()
         if not role:
             # On gère l'erreur d'existence directement ici ou dans le service
             raise NotFoundException(f"Le rôle avec l'ID {idrole} n'existe pas.")
         return role
     
+    def get_by_name(self, name: RoleName) -> Optional[Role]:
+        """Recherche un rôle par son libellé (librole)."""
+        statement = select(Role).where(Role.librole == name)
+        return self.db.exec(statement).first()
 
     def create(self, data: Role) -> Role:
         self.db.add(data)

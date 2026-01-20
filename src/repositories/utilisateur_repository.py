@@ -3,6 +3,7 @@ from typing import List, Optional
 from sqlmodel import Session, select, delete
 from src.models import Utilisateur, UtilisateurRead, RoleUtilisateur
 from src.models import Role
+from sqlalchemy.orm import selectinload
 
 class UtilisateurRepository:
     def __init__(self, db: Session):
@@ -10,11 +11,13 @@ class UtilisateurRepository:
 
     def get_list_utilisateur(self) -> List[UtilisateurRead]:
         """Récupère la liste de toutes les utilisateurs."""
-        return self.db.query(Utilisateur).all()
+        #return self.db.query(Utilisateur).all()
+        statement = select(Utilisateur).options(selectinload(Utilisateur.roles))
+        return self.db.exec(statement).all()
 
     def get_by_id(self, idutilisateur: int) -> Optional[Utilisateur]:
         #return self.db.get(Utilisateur, idutilisateur)
-        statement = select(Utilisateur).where(Utilisateur.code_utilisateur == idutilisateur)
+        statement = select(Utilisateur).where(Utilisateur.id == idutilisateur)
         result = self.db.exec(statement).first()
         return result
 
@@ -73,11 +76,18 @@ class UtilisateurRepository:
         self.db.commit()
 
     def get_paginated(self, limit: int, offset: int) -> List[Utilisateur]:
+        # statement = (
+        #     select(Utilisateur)
+        #     .limit(limit)
+        #     .offset(offset)
+        # )
+        # return self.db.exec(statement).all()
         statement = (
             select(Utilisateur)
+            .options(selectinload(Utilisateur.roles)) # On charge les objets roles
             .limit(limit)
             .offset(offset)
-        )
+    )
         return self.db.exec(statement).all()
 
     def count(self) -> int:
