@@ -2,16 +2,16 @@ from typing import List, Optional
 from sqlmodel import SQLModel, Field
 from decimal import Decimal
 from datetime import date
+from src.models.role_model import RoleRead
 
 
 
 class UtilisateurBase(SQLModel):
-    nom_utilisateur: str | None = Field(default=None, max_length=50)
-    prenom_utilisateur: str | None = Field(default=None, max_length=50)
-    username: str | None = Field(default=None, max_length=50)
+    nom_utilisateur: str  = Field(min_length=2, max_length=50)
+    prenom_utilisateur: str  = Field(min_length=2,max_length=50)
     couleur_fond_utilisateur: int = Field(default=0)
     date_insc_utilisateur: date | None = Field(default=None)
-    disabled: bool = Field(default=False) 
+    disabled: bool = Field(default=False)
 
 
 
@@ -24,15 +24,18 @@ class UtilisateurPatch(UtilisateurBase):
 
 
 class UtilisateurCreate(UtilisateurBase):
+    username: str  = Field(min_length=2,max_length=50,unique=True)
     password: str
-    roles_ids: List[int] = [] 
+    roles_ids: List[int] = []
 
 
 
 class UtilisateurRead(UtilisateurBase):
     id: int
-    roles_ids: List[int] = [] 
-
+    username: str
+    roles_ids: List[int] = []
+    roles: List[RoleRead] = []
 
 
 __all__ = ["UtilisateurBase", "UtilisateurRead", "UtilisateurPatch", "UtilisateurCreate"]
+
