@@ -53,13 +53,33 @@ class RoleService:
     #     except Exception as e:
     #         raise BadRequestException(str(e))
     def create_role(self, data: RoleBase) -> Role:
-            try:
-                # La validation se fait déjà via l'Enum dans le modèle RoleBase
-                obj = Role(**data.model_dump())
-                return self.repo.create(obj)
-            except Exception as e:
-                # Capture les erreurs si le libellé n'est pas Admin, Operateur colis ou Stock
-                raise BadRequestException(f"Impossible de créer le rôle. Détail: {str(e)}")
+        # 1. Préparation de l'objet (Mapping Schéma -> Modèle Table)
+        obj = Role(**data.model_dump())
+
+        # 2. Validation de la règle métier (Les 3 rôles DIGICHEES)
+        allowed_roles = [r.value for r in RoleName] 
+        if obj.librole not in allowed_roles:
+            raise BadRequestException(
+                f"Le rôle '{obj.librole}' n'est pas reconnu par DIGICHEES. "
+                f"Valeurs autorisées : {', '.join(allowed_roles)}"
+            )
+
+        # 3. Tentative de création avec gestion d'erreurs (Doublons et autres)
+        try:
+            # On vérifie si le rôle existe déjà via le repo avant d'insérer (Optionnel mais recommandé)
+            existing = self.repo.get_by_name(obj.librole)
+            if existing:
+                raise BadRequestException(f"Le rôle '{obj.librole}' existe déjà dans le système.")
+
+            return self.repo.create(obj)
+
+        except BadRequestException as e:
+            # On laisse passer notre propre exception métier
+            raise e
+        except Exception as e:
+            # On capture les erreurs SQL (comme le Duplicate Entry 1062 si le check précédent échoue)
+            raise BadRequestException(f"Erreur lors de la création du rôle : {str(e)}")
+        
 
 
     # ------------------------

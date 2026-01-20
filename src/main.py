@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI):
     # Initialisation de la base de données au démarrage de l'application
     Database.init_db()
     # Recréer la base de données (supprimer et recréer les tables si besoin)
-    # Database._recreate_db()
+    #Database._recreate_db()
     yield
     Database.disconnect()
 
