@@ -1,9 +1,13 @@
-
+import os
 from pydantic_settings import BaseSettings
 
 
-
 class Settings(BaseSettings):
+    # --------------------------
+    # Environment
+    # --------------------------
+    ENV: str = "dev"
+
     # --------------------------
     # Database
     # --------------------------
@@ -18,17 +22,16 @@ class Settings(BaseSettings):
     # --------------------------
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30  # facultatif
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # --------------------------
-    # Configuration Pydantic v2
+    # Pydantic v2 config
     # --------------------------
     model_config = {
-        "env_file": ".env",
-        "extra": "allow",  # permet d'avoir d'autres variables dans le .env
-        "case_sensitive": True,  # sensible à la casse
+        "env_file": f".env.{os.getenv('ENV', 'dev')}",
+        "extra": "allow",
+        "case_sensitive": True,
     }
 
 
-# Instance globale à utiliser partout
 settings = Settings()

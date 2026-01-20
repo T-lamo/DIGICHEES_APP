@@ -3,6 +3,7 @@ from src.conf.db.database import Database
 from contextlib import asynccontextmanager
 from src.routes import router
 from src.core import register_exception_handlers
+from src.settings import settings
 import uvicorn
 
 
@@ -16,7 +17,16 @@ async def lifespan(app: FastAPI):
     Database.disconnect()
 
 
-app = FastAPI(lifespan=lifespan)
+
+# Deactivate docs in production
+app = FastAPI(
+    title="DigiChees API",
+    version="1.0.0",
+    lifespan=lifespan,
+    docs_url=None if settings.ENV == "prod" else "/docs",
+    redoc_url=None if settings.ENV == "prod" else "/redoc",
+)
+
 app.include_router(router)
 register_exception_handlers(app)
 
