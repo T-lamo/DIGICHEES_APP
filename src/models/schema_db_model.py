@@ -1,3 +1,5 @@
+from src.models.departement_model import DepartementBase
+from src.models.commune_model import CommuneBase
 from sqlmodel import SQLModel, Field, Relationship
 from typing import List
 from datetime import date
@@ -10,29 +12,23 @@ from .conditionnement_model import ConditionnementBase
 from .poids_model import PoidsBase
 from .utilisateur_model import UtilisateurBase
 from .role_model import RoleBase
+from typing import Optional
 
-class Departement(SQLModel, table=True):
+
+class Departement(DepartementBase, table=True):
     """Table représentant les départements français."""
     
     __tablename__ = "t_dept"
-    
-    code_dept: str = Field(primary_key=True, max_length=2)
-    nom_dept: str | None = Field(default=None, max_length=50, nullable=True)
-    ordre_aff_dept: int = Field(default=0)
-    
+    id: int | None = Field(default=None, primary_key=True)
     communes: List["Commune"] = Relationship(back_populates="departement")
 
-class Commune(SQLModel, table=True):
+class Commune(CommuneBase, table=True):
     """Table représentant les communes associées à un département."""
-    
     __tablename__ = "t_communes"
-    
     id: int | None = Field(default=None, primary_key=True)
-    dep: str = Field(foreign_key="t_dept.code_dept", max_length=2, nullable=False)
-    cp: str | None = Field(default=None, max_length=5, nullable=True)
-    ville: str | None = Field(default=None, max_length=50, nullable=True)
-    
-    departement: Departement | None = Relationship(back_populates="communes")
+    code_departement: Optional[int] = Field(default=None, foreign_key="t_dept.id", nullable=True)
+    departement: Optional[Departement] = Relationship(back_populates="communes")
+
 
 class Client(SQLModel, table=True):
     """Table représentant les clients de la fidélisation de la fromagerie."""
