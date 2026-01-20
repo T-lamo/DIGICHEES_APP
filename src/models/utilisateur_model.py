@@ -1,4 +1,5 @@
 from typing import List, Optional
+from src.models.role_model import RoleRead
 from sqlmodel import SQLModel, Field
 from decimal import Decimal
 from datetime import date
