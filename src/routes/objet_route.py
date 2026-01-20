@@ -64,7 +64,7 @@ def create_objet(
 
 
 # UPDATE / PATCH
-@router.put("/{idcondit}", response_model=ObjetRead)
+@router.patch("/{idcondit}", response_model=ObjetRead)
 def update_objet(
     idcondit: int,
     data: ObjetPatch,
