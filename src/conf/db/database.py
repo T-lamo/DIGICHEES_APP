@@ -5,7 +5,7 @@ class Database:
     _engine = None
 
     @classmethod
-    def _get_engine(cls):
+    def get_engine(cls):
         if cls._engine is None:
             cls._engine = create_engine(
                 f"mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}"
@@ -16,7 +16,7 @@ class Database:
 
     @classmethod
     def get_session(cls):
-        engine = cls._get_engine()
+        engine = cls.get_engine()
         with Session(engine) as session:
             yield session
 
@@ -25,7 +25,7 @@ class Database:
        #import model import ici
         from src.models import __all__ as models  
 
-        engine = cls._get_engine()
+        engine = cls.get_engine()
         SQLModel.metadata.create_all(engine)
 
     @classmethod
@@ -33,7 +33,7 @@ class Database:
         """
         ⚠️ DANGEREUX – réservé aux scripts d’administration
         """
-        engine = cls._get_engine()
+        engine = cls.get_engine()
         SQLModel.metadata.drop_all(engine)
         SQLModel.metadata.create_all(engine)
 

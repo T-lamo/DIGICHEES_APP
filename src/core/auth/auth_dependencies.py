@@ -1,3 +1,5 @@
+from src.core.exceptions import ForbiddenException
+from src.models.role_model import RoleName
 from fastapi import Depends, HTTPException, status
 from sqlmodel import Session
 
@@ -31,7 +33,9 @@ def get_user_sub_from_token(token: str) -> str | None:
     except JWTError:
         return None
 
-# def require_admin(user: Utilisateur = Depends(get_current_active_user)):
-#     if user.role != "admin":
-#         raise HTTPException(status_code=403, detail="Admins only")
-#     return user
+def require_admin_role(user: Utilisateur = Depends(get_current_active_user)):
+    # Vérifier si l'utilisateur a le rôle ADMIN
+    if any(role.librole == RoleName.ADMIN for role in user.roles):
+        return user  
+    else:
+        raise ForbiddenException(detail="L'accès nécessite le rôle ADMIN.")
