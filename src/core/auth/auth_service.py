@@ -62,6 +62,7 @@ class AuthService:
 
     def get_current_active_user(self, token: str) -> Utilisateur:
         user = self.get_current_user(token)
+        print(user)
         if user.disabled:
             raise HTTPException(status_code=400, detail="Inactive user")
         return user
