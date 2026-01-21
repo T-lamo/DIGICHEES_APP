@@ -62,9 +62,7 @@ class UtilisateurRepository:
         self.db.commit()
 
     def delete(self, data: Utilisateur) -> None:
-    #    self.db.delete(data)
-    #    self.db.commit()
-    #"""Supprime l'utilisateur et ses liens de rôles associés"""
+        #"""Supprime l'utilisateur et ses liens de rôles associés"""
         # 1. On supprime d'abord tous les rôles liés à cet utilisateur
         statement = delete(RoleUtilisateur).where(RoleUtilisateur.utilisateur_id == data.id)
         self.db.exec(statement)
@@ -76,12 +74,6 @@ class UtilisateurRepository:
         self.db.commit()
 
     def get_paginated(self, limit: int, offset: int) -> List[Utilisateur]:
-        # statement = (
-        #     select(Utilisateur)
-        #     .limit(limit)
-        #     .offset(offset)
-        # )
-        # return self.db.exec(statement).all()
         statement = (
             select(Utilisateur)
             .options(selectinload(Utilisateur.roles)) # On charge les objets roles

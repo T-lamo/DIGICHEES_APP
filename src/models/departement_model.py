@@ -1,6 +1,7 @@
 
 
 from typing import List, Optional
+from src.models.commune_model import CommuneRead
 from sqlmodel import SQLModel, Field
 from decimal import Decimal
 
@@ -20,6 +21,8 @@ class DepartementPatch(DepartementBase):
 
 class DepartementRead(DepartementBase):
     id: int
+    communes: List[CommuneRead] = []
+
 
 __all__ = ["DepartementBase", "DepartementRead", "DepartementPatch"]
 
