@@ -3,6 +3,14 @@
 Ce projet est une **API backend développée avec FastAPI**, utilisant **SQLModel** pour l’accès aux données et **MariaDB** comme base de données.  
 L’application peut être lancée **en local avec un environnement virtuel Python** ou **via Docker Compose**.
 
+
+## Test With
+| Username | Password  |
+|----------|-----------|
+| admin    | admin123  |
+| colis    | colis123  |
+| stock    | stock123  |
+
 ---
 
 ## 🧱 Stack technique
