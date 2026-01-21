@@ -9,6 +9,7 @@ from src.main import app
 from src.conf.db.database import Database
 from src.models import Utilisateur
 from src.core.auth.auth_dependencies import get_current_active_user, require_admin_role
+from src.core.auth.security import create_access_token
 
 
 
@@ -61,3 +62,12 @@ def client():
     # Cleanup
     app.dependency_overrides.clear()
     SQLModel.metadata.drop_all(engine_test)
+
+@pytest.fixture
+def auth_headers():
+    """
+    Crée un token JWT valide et retourne le header d'authentification.
+    """
+    # On simule un utilisateur (par exemple l'id 1 ou le username 'admin')
+    token = create_access_token(data={"sub": "admin_test"})
+    return {"Authorization": f"Bearer {token}"}
