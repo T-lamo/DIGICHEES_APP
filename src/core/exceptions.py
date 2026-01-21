@@ -13,6 +13,10 @@ class UnauthorizedException(HTTPException):
     def __init__(self, detail: str = "Non autorisé"):
         super().__init__(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail)
 
+class ForbiddenException(HTTPException):
+    def __init__(self, detail: str = "Non autorisé"):
+        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
+
 class ConflictException(HTTPException):
     def __init__(self, detail: str = "Conflit"):
         super().__init__(status_code=status.HTTP_409_CONFLICT, detail=detail)
