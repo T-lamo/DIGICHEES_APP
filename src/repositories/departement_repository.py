@@ -1,13 +1,15 @@
 from typing import List, Optional
 from sqlmodel import Session, select
 from src.models import Departement, DepartementRead
+from sqlalchemy.orm import selectinload
 
 class DepartementRepository:
     def __init__(self, db: Session):
         self.db = db
 
     def get_list_departements(self) -> List[DepartementRead]:
-        return self.db.query(Departement).all()
+        statement = select(Departement).options(selectinload(Departement.communes))
+        return self.db.exec(statement).all()
 
     def get_by_id(self, iddepart: int) -> Optional[Departement]:
         return self.db.get(Departement, iddepart)
@@ -29,7 +31,10 @@ class DepartementRepository:
         self.db.commit()
 
     def get_paginated(self, limit: int, offset: int) -> List[Departement]:
-        statement = select(Departement).limit(limit).offset(offset)
+        statement = (select(Departement)
+                     .options(selectinload(Departement.communes))
+                     .limit(limit)
+                     .offset(offset))
         return self.db.exec(statement).all()
 
     def count(self) -> int:
