@@ -1,0 +1,14 @@
+@startuml
+actor Utilisateur
+participant "Application" as App
+participant "pwdlib / Argon2" as Hash
+database "Base de données" as DB
+
+Utilisateur -> App : Création / Modification du mot de passe
+App -> Hash : Générer hash(mot de passe)
+Hash --> App : Hash sécurisé
+
+App -> DB : Enregistrer / Mettre à jour hash
+DB --> App : Confirmation
+
+@enduml
