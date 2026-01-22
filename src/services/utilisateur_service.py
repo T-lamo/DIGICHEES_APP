@@ -26,7 +26,8 @@ class UtilisateurService:
     ) -> Dict[str, Any]:
         items = self.repo.get_paginated(limit, offset)
         # Remove passwords from the returned data
-        items_read = [UtilisateurRead.from_orm(user) for user in items]
+        # items_read = [UtilisateurRead.from_orm(user) for user in items]
+        items_read = [UtilisateurRead.model_validate(user) for user in items]
         total = self.repo.count()
 
         return {
