@@ -15,6 +15,8 @@ import uvicorn
 async def lifespan(app: FastAPI):
     # Initialisation de la base de données au démarrage de l'application
     Database.init_db()
+    # Database._recreate_db()
+
     with Session(Database.get_engine()) as session:
         SeedService(session).run()
     # Recréer la base de données (supprimer et recréer les tables si besoin)
