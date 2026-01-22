@@ -98,13 +98,14 @@ class RoleService:
             return self.repo.update(obj)
         except Exception as e:
             raise BadRequestException(f"Erreur lors de la mise à jour du rôle : {str(e)}")
-        
+
+
     # ------------------------
     # DELETE
     # ------------------------
     def delete_role(self, idrole: int) -> None:
-        obj = self.get_role(idrole)
-        try:
-            self.repo.delete(obj)
-        except Exception as e:
-            raise BadRequestException(str(e))
+    #     obj = self.get_role(idrole)
+         try:
+             self.repo.delete(idrole)
+         except Exception as e:
+             raise BadRequestException(str(e))
