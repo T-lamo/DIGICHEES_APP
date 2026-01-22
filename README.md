@@ -1,15 +1,8 @@
-# 🚀 API FastAPI – Projet Backend
+# 🚀 DIGICHESS API
 
 Ce projet est une **API backend développée avec FastAPI**, utilisant **SQLModel** pour l’accès aux données et **MariaDB** comme base de données.  
 L’application peut être lancée **en local avec un environnement virtuel Python** ou **via Docker Compose**.
 
-
-## Test With
-| Username | Password  |
-|----------|-----------|
-| admin    | admin123  |
-| colis    | colis123  |
-| stock    | stock123  |
 
 ---
 
@@ -86,7 +79,7 @@ pip freeze > requirements.txt
 uvicorn src.main:app --reload
 ENV=dev uvicorn src.main:app --reload
 ```
-### Lancer l’API
+### Lancer les TESTs
 ```
 ENV_FILE=.env.test pytest
 ```
@@ -144,6 +137,14 @@ docker compose --env-file .env.docker up --build
 | Swagger | http://0.0.0.0:8000/docs |
 | Adminer | http://localhost |
 | MariaDB | localhost:3307 |
+
+
+### Identifiant de connexion
+| Username | Password  |
+|----------|-----------|
+| admin    | admin123  |
+| colis    | colis123  |
+| stock    | stock123  |
 
 ---
 
