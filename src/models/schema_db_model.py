@@ -26,7 +26,7 @@ class Commune(CommuneBase, table=True):
     """Table représentant les communes associées à un département."""
     __tablename__ = "t_communes"
     id: int | None = Field(default=None, primary_key=True)
-    code_departement: Optional[int] = Field(default=None, foreign_key="t_dept.id", nullable=True)
+    id_departement: Optional[int] = Field(default=None, foreign_key="t_dept.id", nullable=True)
     departement: Optional[Departement] = Relationship(back_populates="communes")
 
 
