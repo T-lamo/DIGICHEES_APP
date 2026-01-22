@@ -19,7 +19,7 @@ def test_get_limited_list_communes(client):
     client.post("/departements/", json=payload)
     for i in range(3):
         client.post("/communes/", json={
-          "code_departement": 1,
+          "id_departement": 1,
           "cp": f"750{i}0",
           "nom": "Paris"
         })
@@ -40,7 +40,7 @@ def test_create_commune(client):
         }
     client.post("/departements/", json=payload)
     payload = {
-          "code_departement": 1,
+          "c_departement": 1,
           "cp": "75000",
           "nom": "Paris"
         }

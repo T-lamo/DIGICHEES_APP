@@ -100,8 +100,8 @@ pip install -r requirements.txt
 
 ```
 uvicorn src.main:app --reload
- ENV=dev uvicorn src.main:app --reload
- ENV_FILE=.env.test pytest
+ENV=dev uvicorn src.main:app --reload
+ENV_FILE=.env.test pytest
 ```
 
 Accès :

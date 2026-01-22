@@ -5,7 +5,7 @@ from decimal import Decimal
 
 
 class CommuneBase(SQLModel):
-    code_departement: Optional[int] = Field(default=None, nullable=True)
+    id_departement: Optional[int] = Field(default=None, nullable=True)
     cp: str | None = Field(default=None, max_length=5)  # code postal
     nom: str | None = Field(default=None, max_length=50)  # nom de la commune
     
