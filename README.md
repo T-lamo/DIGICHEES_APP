@@ -54,22 +54,7 @@ mon-projet-api/
 
 Les informations sensibles sont stockées dans le fichier `.env.docker` (non versionné).
 
-### Exemple de `.env.docker`
 
-```
-DB_HOST={db}
-DB_PORT={3306}
-DB_USER={root}
-DB_PASSWORD={password}
-DB_NAME={apidb}
-
-MYSQL_ROOT_PASSWORD={securepassword}
-MYSQL_DATABASE={apidb}
-MYSQL_USER={admin}
-MYSQL_PASSWORD={Admin123!}
-
-PORT_DB_VISUALISATION={3307}
-```
 
 ---
 
@@ -91,9 +76,8 @@ source apivenv/bin/activate
 ### Installer les dépendances
 
 ```
-pip install pymysql python-dotenv fastapi sqlmodel
-pip freeze > requirements.txt
 pip install -r requirements.txt
+pip freeze > requirements.txt
 ```
 
 ### Lancer l’API
@@ -101,6 +85,9 @@ pip install -r requirements.txt
 ```
 uvicorn src.main:app --reload
 ENV=dev uvicorn src.main:app --reload
+```
+### Lancer l’API
+```
 ENV_FILE=.env.test pytest
 ```
 
@@ -112,11 +99,38 @@ Accès :
 
 ## 🐳 Lancement avec Docker
 
-### Prérequis
+### Prérequis (Installer docker et docker compose)
 - Docker
 - Docker Compose v2+
 
+
+### Configurer un ficher `.env.docker` à la racine du projet
+
+```
+DB_HOST={db}
+DB_PORT={3306}
+DB_USER={root}
+DB_PASSWORD={password}
+DB_NAME={apidb}
+
+MYSQL_ROOT_PASSWORD={securepassword}
+MYSQL_DATABASE={apidb}
+MYSQL_USER={user}
+MYSQL_PASSWORD={pwd}
+
+PORT_DB_VISUALISATION={3307}
+
+JWT_SECRET_KEY={JWT_KEY}
+JWT_ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+### Générer [JWT SECRET KEY](https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#hash-and-verify-the-passwords) 
+- Commande :  openssl rand -hex 32
+
 ### Démarrage
+
+- Lancer à la racine du projet: 
 
 ```
 docker compose --env-file .env.docker up --build
@@ -126,8 +140,8 @@ docker compose --env-file .env.docker up --build
 
 | Service | URL |
 |------|----|
-| FastAPI | http://localhost:8000 |
-| Swagger | http://localhost:8000/docs |
+| FastAPI | http://0.0.0.0:8000 |
+| Swagger | http://0.0.0.0:8000/docs |
 | Adminer | http://localhost |
 | MariaDB | localhost:3307 |
 
