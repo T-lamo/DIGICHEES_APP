@@ -38,9 +38,6 @@ class RoleRepository:
         self.db.refresh(data)
         return data
 
-    #def delete(self, data: Role) -> None:
-        # self.db.delete(data)
-        # self.db.commit()
     def delete(self, idrole: int) -> bool:
         role = self.get_by_id(idrole) 
         self.db.delete(role)

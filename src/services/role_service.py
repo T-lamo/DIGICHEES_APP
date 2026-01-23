@@ -41,17 +41,7 @@ class RoleService:
             raise NotFoundException(f"Role {idrole} introuvable")
         return obj
 
-    # ------------------------
-    # CREATE
-    # ------------------------
-    # def create_role(
-    #     self, data: RoleBase
-    # ) -> Role:
-    #     try:
-    #         obj = Role(**data.model_dump())
-    #         return self.repo.create(obj)
-    #     except Exception as e:
-    #         raise BadRequestException(str(e))
+  
     def create_role(self, data: RoleBase) -> Role:
         # 1. Préparation de l'objet (Mapping Schéma -> Modèle Table)
         obj = Role(**data.model_dump())

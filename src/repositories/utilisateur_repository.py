@@ -21,11 +21,6 @@ class UtilisateurRepository:
         result = self.db.exec(statement).first()
         return result
 
-    #def create(self, data: Utilisateur) -> Utilisateur:
-    #    self.db.add(data)
-    #    self.db.commit()
-    #    self.db.refresh(data)
-    #    return data
     
     def create_with_roles(self, data: Utilisateur, roles_ids: List[int]) -> Utilisateur:
         """Crée l'utilisateur ET ses rôles dans la table de jointure."""
