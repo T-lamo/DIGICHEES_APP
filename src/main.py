@@ -6,8 +6,6 @@ from src.routes import router
 from src.core import register_exception_handlers
 from src.settings import settings
 from sqlmodel import Session
-from fastapi import Depends
-from src.core.auth.auth_dependencies import require_admin_role
 import uvicorn
 
 

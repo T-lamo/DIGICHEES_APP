@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 from sqlmodel import Session
 from src.repositories.utilisateur_repository import UtilisateurRepository
-from src.models import Utilisateur, UtilisateurBase, UtilisateurRead, UtilisateurPatch, UtilisateurCreate
+from src.models import Utilisateur, UtilisateurRead, UtilisateurPatch, UtilisateurCreate
 from src.core import NotFoundException, BadRequestException
 from src.core.auth.security import get_password_hash
 from src.repositories.role_repository import RoleRepository
@@ -48,16 +48,6 @@ class UtilisateurService:
 
 
 # ------------------------
-    # CREATE
-    # ------------------------
-    #def create_utilisateur(
-    #    self, data: UtilisateurBase
-    #) -> Utilisateur:
-    #    try:
-    #        obj = Utilisateur(**data.model_dump())
-    #        return self.repo.create(obj)
-    #    except Exception as e:
-    #        raise BadRequestException(str(e))
     
     def create_utilisateur(self, data: UtilisateurCreate) -> Utilisateur:
         try:
@@ -80,8 +70,7 @@ class UtilisateurService:
                 # 1. Validation : INTERDIRE VIDE (Liste vide ou None)
                 if not data.roles_ids or len(data.roles_ids) == 0:
                     raise BadRequestException(
-                        "Un utilisateur doit avoir au moins un rôle. La liste ne peut pas être vide. "
-                        "Choisissez : 1 (Admin), 2 (Operateur_colis), 3 (Operateur_stock)."
+                        "Un utilisateur doit avoir au moins un rôle. La liste ne peut pas être vide."
                     )
                 
             # 2. Validation : Validation des Rôles : Vérification des IDs
@@ -89,14 +78,13 @@ class UtilisateurService:
                     if r_id == 0:
                         raise BadRequestException(
                             "Le rôle ne peut pas être 0. "
-                            "Choisissez parmi les IDs valides : 1 (Admin), 2 (Operateur_colis), 3 (Operateur_stock)."
                         )
                     
                     # Vérifier si l'ID existe en base (1, 2 ou 3 uniquement)
                     role_obj = self.role_repo.get_by_id(r_id)
                     if not role_obj:
                         raise NotFoundException(
-                            f"L'ID de rôle {r_id} n'existe pas. Seuls les IDs 1, 2 et 3 sont autorisés."
+                            f"L'ID de rôle {r_id} n'existe pas."
                         )
 
                 
