@@ -34,7 +34,6 @@ class UtilisateurCreate(UtilisateurBase):
 class UtilisateurRead(UtilisateurBase):
     id: int
     username: str
-    roles_ids: List[int] = []
     roles: List[RoleRead] = []
 
 

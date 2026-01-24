@@ -65,21 +65,35 @@ class SeedService:
                 "password": "admin123",
                 "nom": "Admin",
                 "prenom": "System",
-                "roles": [RoleName.ADMIN]
+                "roles": [RoleName.ADMIN],
+                "disabled": False,
+
+            },
+            {
+                "username": "admin_inactif",
+                "password": "admin123",
+                "nom": "Admin",
+                "prenom": "System",
+                "roles": [RoleName.ADMIN],
+                "disabled": True,
             },
             {
                 "username": "colis",
                 "password": "colis123",
                 "nom": "Operateur",
                 "prenom": "Colis",
-                "roles": [RoleName.OPERATEUR_COLIS]
+                "roles": [RoleName.OPERATEUR_COLIS],
+                "disabled": False,
+
             },
             {
                 "username": "stock",
                 "password": "stock123",
                 "nom": "Operateur",
                 "prenom": "Stock",
-                "roles": [RoleName.OPERATEUR_STOCK]
+                "roles": [RoleName.OPERATEUR_STOCK],
+                "disabled": False,
+
             }
         ]
 
@@ -99,7 +113,7 @@ class SeedService:
                 password=get_password_hash(user_data["password"]),
                 nom_utilisateur=user_data["nom"],
                 prenom_utilisateur=user_data["prenom"],
-                disabled=False
+                disabled=user_data["disabled"] 
             )
 
             for role_name in user_data["roles"]:
