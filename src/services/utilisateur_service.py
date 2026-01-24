@@ -117,7 +117,7 @@ class UtilisateurService:
             for r_id in data.roles_ids:
                 if r_id == 0:
                     raise BadRequestException(
-                        "Le rôle ne peut pas être 0. Choisissez : 1 (Admin), 2 (Operateur_colis), 3 (Operateur_stock)."
+                        "Le rôle ne peut pas être 0. "
                     )
                 
                 # Vérification de l'existence en base

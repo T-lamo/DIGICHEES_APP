@@ -100,12 +100,12 @@ class RoleService:
     #      except Exception as e:
     #          raise BadRequestException(str(e))
     def delete_role(self, idrole: int) -> None:
-        # 1. Vérification des rôles protégés (Règle métier)
-        if idrole in [1, 2, 3]:
-            # On lève une erreur claire pour l'utilisateur
-            raise BadRequestException(
-                "Action impossible : Les rôles métiers (Admin, Colis, Stock) sont indispensables au système et ne peuvent pas être supprimés."
-            )
+        # # 1. Vérification des rôles protégés (Règle métier)
+        # if idrole in [1, 2, 3]:
+        #     # On lève une erreur claire pour l'utilisateur
+        #     raise BadRequestException(
+        #         "Action impossible : Les rôles métiers (Admin, Colis, Stock) sont indispensables au système et ne peuvent pas être supprimés."
+        #     )
  
         # 2. Tentative de suppression via le Repository
         try:
