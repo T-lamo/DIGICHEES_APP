@@ -46,13 +46,13 @@ class RoleService:
         # 1. Préparation de l'objet (Mapping Schéma -> Modèle Table)
         obj = Role(**data.model_dump())
 
-        # 2. Validation de la règle métier (Les 3 rôles DIGICHEES)
-        allowed_roles = [r.value for r in RoleName] 
-        if obj.librole not in allowed_roles:
-            raise BadRequestException(
-                f"Le rôle '{obj.librole}' n'est pas reconnu par DIGICHEES. "
-                f"Valeurs autorisées : {', '.join(allowed_roles)}"
-            )
+        # # 2. Validation de la règle métier (Les 3 rôles DIGICHEES)
+        # allowed_roles = [r.value for r in RoleName] 
+        # if obj.librole not in allowed_roles:
+        #     raise BadRequestException(
+        #         f"Le rôle '{obj.librole}' n'est pas reconnu par DIGICHEES. "
+        #         f"Valeurs autorisées : {', '.join(allowed_roles)}"
+        #     )
 
         # 3. Tentative de création avec gestion d'erreurs (Doublons et autres)
         try:

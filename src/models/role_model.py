@@ -13,7 +13,7 @@ class RoleBase(SQLModel):
     #librole: RoleName = Field(unique=True, nullable=False)
 
 class RolePatch(RoleBase):
-    librole: Optional[RoleName] = None
+    librole: Optional[str] = None
 
 class RoleRead(RoleBase):
     id: int
