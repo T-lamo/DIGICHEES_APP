@@ -1,22 +1,57 @@
-# 1️⃣ Image Python officielle
+
+
+
+# ================================
+# BASE IMAGE
+# ================================
 FROM python:3.12-slim
 
-# 2️⃣ Dossier de travail dans le container
+# ================================
+# SYSTEM PACKAGES
+# ================================
+RUN apt-get update && \
+    apt-get install -y mariadb-server netcat-openbsd python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+# ================================
+# WORKDIR
+# ================================
 WORKDIR /app
 
-# 3️⃣ Copier les dépendances
+# ================================
+# PYTHON VENV
+# ================================
+RUN python -m venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+
+# ================================
+# PYTHON DEPENDENCIES
+# ================================
 COPY requirements.txt .
-COPY .env.docker .env.docker
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-
-# 4️⃣ Installer les dépendances
-RUN pip install --no-cache-dir -r requirements.txt
-
-# 5️⃣ Copier le code source
+# ================================
+# APP CODE
+# ================================
 COPY src ./src
 
-# 6️⃣ Exposer le port FastAPI
-EXPOSE 8000
+# ================================
+# DB INIT SCRIPT
+# ================================
+COPY init.sql /init.sql
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# 7️⃣ Lancer l'application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80", "--reload", "--reload-dir", "src"]
+# ================================
+# PORTS
+# ================================
+EXPOSE 8000
+EXPOSE 3306
+
+# ================================
+# STARTUP
+# ================================
+CMD ["/start.sh"]
+
+
