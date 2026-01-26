@@ -46,13 +46,13 @@ class RoleService:
         # 1. Préparation de l'objet (Mapping Schéma -> Modèle Table)
         obj = Role(**data.model_dump())
 
-        # 2. Validation de la règle métier (Les 3 rôles DIGICHEES)
-        allowed_roles = [r.value for r in RoleName] 
-        if obj.librole not in allowed_roles:
-            raise BadRequestException(
-                f"Le rôle '{obj.librole}' n'est pas reconnu par DIGICHEES. "
-                f"Valeurs autorisées : {', '.join(allowed_roles)}"
-            )
+        # # 2. Validation de la règle métier (Les 3 rôles DIGICHEES)
+        # allowed_roles = [r.value for r in RoleName] 
+        # if obj.librole not in allowed_roles:
+        #     raise BadRequestException(
+        #         f"Le rôle '{obj.librole}' n'est pas reconnu par DIGICHEES. "
+        #         f"Valeurs autorisées : {', '.join(allowed_roles)}"
+        #     )
 
         # 3. Tentative de création avec gestion d'erreurs (Doublons et autres)
         try:
@@ -93,9 +93,24 @@ class RoleService:
     # ------------------------
     # DELETE
     # ------------------------
+    # def delete_role(self, idrole: int) -> None:
+    # #     obj = self.get_role(idrole)
+    #      try:
+    #          self.repo.delete(idrole)
+    #      except Exception as e:
+    #          raise BadRequestException(str(e))
     def delete_role(self, idrole: int) -> None:
-    #     obj = self.get_role(idrole)
-         try:
-             self.repo.delete(idrole)
-         except Exception as e:
-             raise BadRequestException(str(e))
+        # # 1. Vérification des rôles protégés (Règle métier)
+        # if idrole in [1, 2, 3]:
+        #     # On lève une erreur claire pour l'utilisateur
+        #     raise BadRequestException(
+        #         "Action impossible : Les rôles métiers (Admin, Colis, Stock) sont indispensables au système et ne peuvent pas être supprimés."
+        #     )
+ 
+        # 2. Tentative de suppression via le Repository
+        try:
+            success = self.repo.delete(idrole)
+            if not success:
+                raise BadRequestException(f"Le rôle avec l'ID {idrole} n'existe pas.")
+        except Exception as e:
+            raise BadRequestException(f"Erreur technique lors de la suppression : {str(e)}")

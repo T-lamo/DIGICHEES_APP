@@ -9,11 +9,11 @@ class RoleName(str, Enum):
     OPERATEUR_STOCK = "Operateur_stock"
 
 class RoleBase(SQLModel):
-    #librole: str = Field(index=True, unique=True)
-    librole: RoleName = Field(unique=True, nullable=False)
+    librole: str = Field(index=True, unique=True)
+    #librole: RoleName = Field(unique=True, nullable=False)
 
 class RolePatch(RoleBase):
-    librole: Optional[RoleName] = None
+    librole: Optional[str] = None
 
 class RoleRead(RoleBase):
     id: int

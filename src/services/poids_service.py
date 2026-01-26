@@ -46,11 +46,20 @@ class PoidsService:
     def create_poids(
         self, data: PoidsBase
     ) -> Poids:
+        # try:
+        #     obj = Poids(**data.model_dump())
+        #     return self.repo.create(obj)
+        # except Exception as e:
+        #     # Exemple : violation de contrainte unique ou autre erreur DB
+        #     raise BadRequestException(str(e))
+        # RÈGLE MÉTIER : Interdire les chiffres inférieurs à 0
+        if data.value < 0 or data.min < 0:
+            raise BadRequestException("Les valeurs de poids (val/min) ne peuvent pas être négatives.")
+            
         try:
             obj = Poids(**data.model_dump())
             return self.repo.create(obj)
         except Exception as e:
-            # Exemple : violation de contrainte unique ou autre erreur DB
             raise BadRequestException(str(e))
 
     # ------------------------
@@ -60,6 +69,18 @@ class PoidsService:
         self, idpoids: int, data: PoidsPatch
     ) -> Poids:
         obj = self.get_poids(idpoids)
+
+        # update_data = data.model_dump(exclude_unset=True)
+        # for key, value in update_data.items():
+        #     setattr(obj, key, value)
+
+        # try:
+        #     return self.repo.update(obj)
+        # except Exception as e:
+        #     raise BadRequestException(str(e))
+        # RÈGLE MÉTIER : Vérifier la valeur si elle est présente dans le patch
+        if (data.value is not None and data.value < 0) or (data.min is not None and data.min < 0):
+            raise BadRequestException("Modification refusée : les valeurs ne peuvent pas être négatives.")
 
         update_data = data.model_dump(exclude_unset=True)
         for key, value in update_data.items():
